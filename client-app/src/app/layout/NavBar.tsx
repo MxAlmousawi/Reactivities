@@ -1,6 +1,5 @@
 import { Button, Container, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-
 const NavBar = () => {
   return (
     <Menu inverted fixed="top">
