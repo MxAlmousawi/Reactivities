@@ -1,8 +1,8 @@
 import { Grid } from "semantic-ui-react";
-import { useStore } from "../../../stores/store";
-import LoadingComponent from "../../../layout/LoadingComponent";
+import { useStore } from "../../../app/stores/store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import ActivityDetailedHeader from "./ActivityDetailedHeader";
 import ActivityDetailedInfo from "./ActivityDetailedInfo";
@@ -31,7 +31,7 @@ const ActivityDetails = () => {
     <Grid>
       <Grid.Column width={10}>
         <ActivityDetailedHeader activity={activity} />
-        <ActivityDetailedInfo activity={activity}/>
+        <ActivityDetailedInfo activity={activity} />
         <ActivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
