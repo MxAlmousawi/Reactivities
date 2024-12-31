@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace API.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController(UserManager<AppUser> userManager, TokenService tokenService) : ControllerBase
@@ -38,9 +38,17 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            if (await userManager.FindByEmailAsync(registerDto.Email) != null) return BadRequest("Email taken");
+            if (await userManager.FindByEmailAsync(registerDto.Email) != null)
+            {
+                ModelState.AddModelError("email", "Email taken");
+                return ValidationProblem(ModelState);
+            }
 
-            if (await userManager.FindByNameAsync(registerDto.Username) != null) return BadRequest("Username taken");
+            if (await userManager.FindByNameAsync(registerDto.Username) != null)
+            {
+                ModelState.AddModelError("username", "Username taken");
+                return ValidationProblem(ModelState);
+            }
 
             var user = new AppUser
             {
