@@ -33,9 +33,15 @@ namespace Application.Activities
                 this.mapper = mapper;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(
+                Command request,
+                CancellationToken cancellationToken
+            )
             {
-                var activity = await context.Activities.FindAsync(request.Activity.Id, cancellationToken);
+                var activity = await context.Activities.FindAsync(
+                    request.Activity.Id,
+                    cancellationToken
+                );
 
                 if (activity == null)
                 {

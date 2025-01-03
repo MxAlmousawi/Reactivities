@@ -1,37 +1,42 @@
-﻿using Application.Core;
-using Domain;
-using MediatR;
-using Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Domain;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace Application.Activities
 {
     public class Details
     {
-        public class Query : IRequest<Result<Activity>>
+        public class Query : IRequest<Result<ActivityDto>>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<Activity>>
+
+        public class Handler(DataContext context, IMapper mapper)
+            : IRequestHandler<Query, Result<ActivityDto>>
         {
-            private readonly DataContext context;
+            private readonly DataContext context = context;
+            private readonly IMapper mapper = mapper;
 
-            public Handler(DataContext context)
+            public async Task<Result<ActivityDto>> Handle(
+                Query request,
+                CancellationToken cancellationToken
+            )
             {
-                this.context = context;
-            }
-            public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var activity = await context.Activities.FindAsync(request.Id);
+                var activity = await context
+                    .Activities.ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                return Result<Activity>.Success(activity);
+                return Result<ActivityDto>.Success(activity);
             }
         }
     }
-
-    
 }

@@ -1,11 +1,11 @@
-﻿using Application.Core;
-using MediatR;
-using Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Core;
+using MediatR;
+using Persistence;
 
 namespace Application.Activities
 {
@@ -25,7 +25,10 @@ namespace Application.Activities
                 this.context = context;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(
+                Command request,
+                CancellationToken cancellationToken
+            )
             {
                 var activity = await context.Activities.FindAsync(request.Id, cancellationToken);
 
@@ -47,6 +50,4 @@ namespace Application.Activities
             }
         }
     }
-
-
 }

@@ -1,17 +1,17 @@
-﻿using API.DTOs;
+﻿using System.Security.Claims;
+using API.DTOs;
 using API.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace API.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(UserManager<AppUser> userManager, TokenService tokenService) : ControllerBase
+    public class AccountController(UserManager<AppUser> userManager, TokenService tokenService)
+        : ControllerBase
     {
         private readonly UserManager<AppUser> userManager = userManager;
         private readonly TokenService tokenService = tokenService;
@@ -22,7 +22,8 @@ namespace API.Controllers
         {
             var user = await userManager.FindByEmailAsync(loginDto.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null)
+                return Unauthorized();
 
             var result = await userManager.CheckPasswordAsync(user, loginDto.Password);
 
@@ -54,7 +55,7 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.Username,
             };
 
             var result = await userManager.CreateAsync(user, registerDto.Password);
@@ -83,7 +84,7 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Token = tokenService.CreateToken(user),
                 Username = user.UserName,
-                Image = null
+                Image = null,
             };
         }
     }
