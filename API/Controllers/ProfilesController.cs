@@ -1,0 +1,16 @@
+﻿using Application.Profiles;
+using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace API.Controllers
+{
+    public class ProfilesController : BaseApiController
+    {
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetProfile(string username)
+        {
+            return HandleResult(await Mediator.Send(new Details.Query { Username = username }));
+        }
+    }
+}
