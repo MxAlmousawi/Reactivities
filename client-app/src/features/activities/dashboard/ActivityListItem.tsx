@@ -21,13 +21,18 @@ const ActivityListItem = ({ act }: Props) => {
         )}
         <Item.Group>
           <Item>
-            <Item.Image size="tiny" circular src="/assets/user.png" style={{marginBottom: 4}} />
+            <Item.Image
+              size="tiny"
+              circular
+              src={act.host?.image || "/assets/user.png"}
+              style={{ marginBottom: 4 }}
+            />
             <Item.Content>
               <Item.Header as={Link} to={`/activities/${act.id}`}>
                 {act.title}
               </Item.Header>
               <Item.Description>
-                Hosted by {act.host?.displayName}
+                Hosted by <Link to={`/profiles/${act.host?.username}`}>{act.host?.displayName}</Link>
               </Item.Description>
               {act.isHost && (
                 <Item.Description>

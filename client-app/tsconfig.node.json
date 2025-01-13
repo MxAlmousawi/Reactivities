@@ -14,7 +14,7 @@
 
     /* Linting */
 
-    "strict": false,
+    "strict": false
   },
   "include": ["vite.config.ts"]
 }
