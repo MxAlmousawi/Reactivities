@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Core;
+﻿using Application.Core;
 using Application.Interfaces;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

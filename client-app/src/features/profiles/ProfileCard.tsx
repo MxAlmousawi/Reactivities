@@ -30,4 +30,3 @@ const ProfileCard = ({ profile }: Props) => {
   );
 };
 export default observer(ProfileCard);
-

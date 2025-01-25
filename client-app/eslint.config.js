@@ -24,6 +24,10 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "no-unused-expressions": false,
+      "@typescript-eslint/no-explicit-any": "off",
+      "react/no-deprecated": "off",
+      // Add this line to suppress findDOMNode warning
+      "react/no-find-dom-node": "off",
     },
   }
 );

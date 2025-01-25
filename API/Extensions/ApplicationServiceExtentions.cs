@@ -12,7 +12,10 @@ namespace API.Extensions
 {
     public static class ApplicationServiceExtentions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApplicationServices(
+            this IServiceCollection services,
+            IConfiguration config
+        )
         {
             services.AddDbContext<DataContext>(options =>
             {
@@ -21,10 +24,17 @@ namespace API.Extensions
 
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:5173");
-                });
+                opt.AddPolicy(
+                    "CorsPolicy",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials()
+                            .WithOrigins("http://localhost:5173");
+                    }
+                );
             });
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List).Assembly));
@@ -42,6 +52,8 @@ namespace API.Extensions
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
             services.Configure<CloudSettings>(config.GetSection("Cloud"));
+
+            services.AddSignalR();
 
             return services;
         }
