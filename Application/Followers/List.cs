@@ -1,0 +1,68 @@
+﻿using Application.Core;
+using Application.Interfaces;
+using Application.Profiles;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
+
+namespace Application.Followers
+{
+    public class List
+    {
+        public class Query : IRequest<Result<List<Profiles.Profile>>>
+        {
+            public string Username { get; set; }
+            public string Predicate { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Query, Result<List<Profiles.Profile>>>
+        {
+            private readonly IMapper mapper;
+            private readonly DataContext context;
+            private readonly IUserAccessor userAccessor;
+
+            public Handler(IMapper mapper, DataContext context, IUserAccessor userAccessor)
+            {
+                this.mapper = mapper;
+                this.context = context;
+                this.userAccessor = userAccessor;
+            }
+
+            public async Task<Result<List<Profiles.Profile>>> Handle(
+                Query request,
+                CancellationToken cancellationToken
+            )
+            {
+                var profiles = new List<Profiles.Profile>();
+
+                switch (request.Predicate)
+                {
+                    case "followers":
+                        profiles = await context
+                            .UserFollowings.Where(x => x.Target.UserName == request.Username)
+                            .Select(u => u.Observer)
+                            .ProjectTo<Profiles.Profile>(
+                                mapper.ConfigurationProvider,
+                                new { currentUsername = userAccessor.GetUsername() }
+                            )
+                            .ToListAsync();
+                        break;
+                    case "following":
+                        profiles = await context
+                            .UserFollowings.Where(x => x.Observer.UserName == request.Username)
+                            .Select(u => u.Target)
+                            .ProjectTo<Profiles.Profile>(
+                                mapper.ConfigurationProvider,
+                                new { currentUsername = userAccessor.GetUsername() }
+                            )
+                            .ToListAsync();
+                        break;
+                }
+
+                return Result<List<Profiles.Profile>>.Success(profiles);
+            }
+        }
+    }
+}

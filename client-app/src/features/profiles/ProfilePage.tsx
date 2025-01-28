@@ -10,10 +10,13 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 const ProfilePage = () => {
   const { username } = useParams<{ username: string }>();
   const { profileStore } = useStore();
-  const { loadingProfile, loadProfile, profile } = profileStore;
+  const { loadingProfile, loadProfile, profile, setActiveTab } = profileStore;
 
   useEffect(() => {
     loadProfile(username!);
+    return () => {
+      setActiveTab(0);
+    };
   }, [loadProfile, username]);
 
   if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
