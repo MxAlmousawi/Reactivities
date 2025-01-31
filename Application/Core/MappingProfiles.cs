@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Activities;
+﻿using Application.Activities;
 using Application.Comments;
 using AutoMapper;
 using Domain;
@@ -35,7 +30,23 @@ namespace Application.Core
                 .ForMember(
                     d => d.Following,
                     o =>
-                        o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName == currentUsername))
+                        o.MapFrom(s =>
+                            s.AppUser.Followers.Any(x => x.Observer.UserName == currentUsername)
+                        )
+                );
+            CreateMap<ActivityAttendee, Profiles.UserActivityDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Activity.Id))
+                .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
+                .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
+                .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
+                .ForMember(
+                    d => d.HostUsername,
+                    o =>
+                        o.MapFrom(s =>
+                            s.Activity.Attendees.FirstOrDefault(x =>
+                                x.IsHost == true
+                            ).AppUser.UserName
+                        )
                 );
 
             CreateMap<AppUser, Profiles.Profile>()
