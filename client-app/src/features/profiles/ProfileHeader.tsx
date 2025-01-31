@@ -1,9 +1,7 @@
 import {
-  Button,
   Divider,
   Grid,
   Item,
-  Reveal,
   Segment,
   Statistic,
 } from "semantic-ui-react";
