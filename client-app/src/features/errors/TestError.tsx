@@ -4,7 +4,7 @@ import axios from "axios";
 import ValidationError from "./ValidationError";
 
 export default function TestErrors() {
-  const baseUrl = "http://localhost:5000/api/";
+  const baseUrl = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState(null);
 
   function handleNotFound() {
@@ -14,9 +14,7 @@ export default function TestErrors() {
   }
 
   function handleBadRequest() {
-    axios
-      .get(baseUrl + "buggy/bad-request")
-      .catch((err) => console.log(err));
+    axios.get(baseUrl + "buggy/bad-request").catch((err) => console.log(err));
   }
 
   function handleServerError() {
